@@ -5,7 +5,9 @@ from pathlib import Path
 
 print('Null values proceeding.')
 
+#only null cells
 null_check = bank_subs.loc[:, bank_subs.isna().any()]
+#only null columns
 null_check = null_check[null_check.isna().any(axis=1)]
 null_check = bank_subs[['BRAND',
                         'VEH_TYPE']].merge(null_check
@@ -89,33 +91,6 @@ sub_zero = bank_subs[(bank_subs['VEHICLE_COST_AMT'] < 0) |
                                (bank_subs['CASCO_SUBSIDY_AMT'] < 0) |
                                 (bank_subs['NETTO_CREDIT_CAR_AMT'] < 0) |
                                (bank_subs['CREDIT_AMT'] < 0) |
-                               (bank_subs['INTEREST_RATE_PRC'] < 0) |
-                               (bank_subs['BANK_RATE_PRC'] < 0) |
-                               (bank_subs['DOWNPAYMENT_AMT'] < 0) |
-                               (bank_subs['FINAL_PAYMENT_AMT'] < 0) |
-                               (bank_subs['CASCO_PREMIUM_AMT'] < 0) |
-                               (bank_subs['SUBRNB_AMT'] < 0) |
-                               (bank_subs['SERV_SPREAD_AMT'] < 0) |
-                               (bank_subs['SUB_EW_AMT'] < 0) |
-                               (bank_subs['NET_SUBSIDY_AMT'] < 0) |
-                               (bank_subs['REAL_RATE_PRC'] < 0) |
-                               (bank_subs['ROUND_REAL_RATE_PRC'] < 0) |
-                               (bank_subs['SUB_RECALC_AMT'] < 0) |
-                               (bank_subs['REFINANCE_CREDIT_AMT'] < 0) |
-                               (bank_subs['SUBRNB_RECALC_AMT'] < 0) |
-                               (bank_subs['SUBSIDY_PRC'] < 0) |
-                               (bank_subs['BRAND_DISCOUNT_PRC'] < 0) |
-                               (bank_subs['RRP_DISCOUNT_PRC'] < 0) |
-                               (bank_subs['LOYALTY_SUBSIDY_AMT'] < 0) |
-                               (bank_subs['RRP_SUBSIDY_AMT'] < 0) |
-                               (bank_subs['INTEREST_SUBSIDY_AMT'] < 0) |
-                               (bank_subs['RATE_RECALC_2_PRC'] < 0) |
-                               (bank_subs['ROUND_RATE_RECALC_2_PRC'] < 0) |
-                               (bank_subs['SUBSIDY_RECALC_2_AMT'] < 0) |
-                               (bank_subs['MARKETING_RATE_PRC'] < 0) |
-                               (bank_subs['AF_SPREAD_AMT'] < 0) |
-                               (bank_subs['AF_SPREAD_RECLAC_AMT'] < 0) |
-                               (bank_subs['NET_RECALC_AMT'] < 0) |
                                (bank_subs['INTEREST_SUBSIDY_PRC'] < 0)]
 
 print(sub_zero)
@@ -147,7 +122,7 @@ writer = pd.ExcelWriter\
     ('test_subsidy_'+str(month_input)+'_'+str(year_input)+'.xlsx'
      , engine='xlsxwriter')
 
-ind_month.to_excel(writer, sheet_name='v_indicator_fpa')
+ind_month.to_excel(writer, sheet_name='')
 bank_subs.to_excel(writer, sheet_name='dm_sm.bank_subsidy')
 null_check.to_excel(writer, sheet_name='total_null_check')
 unknown_m.to_excel(writer, sheet_name='UNKNOWN_MODEL_CD')
