@@ -1,4 +1,4 @@
-print('dm_sm.bank_subsidy test\n'
+print('smth\n'
       '\n'
       'Wait for further instructions...')
 
@@ -13,21 +13,17 @@ import numpy as np
 year_input = int(input('Type year:'))
 month_input = int(input('Type month:'))
 
-print('Connecting to DWHNW_PDB...')
-dsn_new = """(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)
-(HOST=rnb-vmdwh-dbpr03.rci.renault.ru)(PORT=1521))
-(ADDRESS=(PROTOCOL=TCP)
-(HOST=rnb-vmdwh-dbpr03.rci.renault.ru)(PORT=1521))
-(LOAD_BALANCE= yes))
-(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=DWHNW_PDB)))
+print('Connecting to DWH1...')
+dsn_new = """
+#connection just like Oracle likes 
 """
-connection_new = cx.connect("iz01340", "iz01340", dsn_new)
+connection_new = cx.connect(..., dsn_new)
 
 print('Query in progress...')
 
 query_new = """select *
-            from dm_sm.bank_subsidy\
-            where app_number is not null"""
+            from _
+            where _ is not null"""
 
 bank_subs = pd.read_sql(query_new,
                         con=connection_new,
@@ -40,16 +36,11 @@ bank_subs = pd.read_sql(query_new,
                                      ]
                         )
 
-print('Connecting to DWHPR_DG...')
+print('Connecting to DWH2...')
 
-dsn = """(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)
-(HOST=rnb-vmdwh-dbpr04.rci.renault.ru)(PORT=1521))
-(ADDRESS=(PROTOCOL=TCP)
-(HOST=rnb-vmdwh-dbpr03.rci.renault.ru)(PORT=1521))
-(LOAD_BALANCE= yes))
-(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=DWHPR_DG)))
+dsn = """!!!
 """
-connection = cx.connect("iz01340", "iz01340", dsn)
+connection = cx.connect("!!!", dsn)
 
 print('Query in progress...')
 
@@ -61,11 +52,9 @@ query = query.format(year_input, month_input)
 ind_month = pd.read_sql(query,
                         con=connection,
                         index_col='APP_NUMBER',
-                        parse_dates=['CREDIT_ISSUE_DATE',
-                                     'CASKO_START_DATE',
+                        parse_dates=['DATE',
                                      'BIRTHDAY',
-                                     'CREDIT_CLOSED_DATE',
-                                     'CASKO_END_DATE'
+                                     'DATE',
                                      ]
                         )
 
@@ -74,10 +63,10 @@ print('Checking for input period:')
 if ((bank_subs['PERIOD_DT'].dt.month == month_input) &
     (year_input == bank_subs['PERIOD_DT'].dt.year)).any():
 
-    print('From DM_SM.BANK_SUBSDY Group by PERIOD_DT...')
+    print('')
     print(bank_subs.groupby(['PERIOD_DT']).agg(['count']))
-    print('From DWH.V_INDICATOR_FPA Group by M_OF_FINANCING...')
-    print(ind_month.groupby(['M_OF_FINANCING', 'Y_OF_FINANCING']).agg(['count']))
+    print('')
+    print(ind_month.groupby(['M_', 'Y_']).agg(['count']))
 
 
 
